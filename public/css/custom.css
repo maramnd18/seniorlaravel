@@ -1,0 +1,185 @@
+:root {
+    --primary-color: #F0F8FF; /* Alice Blue */
+    --secondary-color: #5A9BD5; /* Light Blue */
+    --tertiary-color: #6fa0c9 ; /* Steel Blue */
+    --accent-color: #1E90FF; /* Dodger Blue */
+    --dark-color: #003366; /* Dark Blue */
+    --light-color: #B0E0E6; /* Powder Blue */
+    --text-color: #333; /* Dark Text Color */
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: var(--tertiary-color) !important;
+}
+
+.navbar-brand, .navbar-nav .nav-link {
+    color: var(--primary-color) !important;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--secondary-color) !important;
+}
+
+.btn-primary {
+    background-color: var(--tertiary-color);
+    border-color:white;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.container {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+footer {
+    background-color: var(--primary-color);
+    color: var(--dark-color);
+    padding: 20px 0;
+    text-align: center;
+}
+
+footer a {
+    color: var(--accent-color);
+}
+
+.navbar-nav .nav-link {
+    color: var(--primary-color) !important;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--dark-color) !important;
+}
+
+
+
+img.rounded-circle {
+    border: 5px solid #f0f8ff;
+    transition: transform 0.3s ease-in-out;
+}
+
+img.rounded-circle:hover {
+    transform: scale(1.1);
+}
+
+.wrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+.wrapper::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    filter: blur(10px);
+    z-index: -1; 
+}
+
+/* Inner container for form */
+.inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 15px;
+    width: 800px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Image Holder */
+.image-holder {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-holder img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Form Section */
+.form-container {
+    flex: 1;
+    padding: 20px;
+}
+
+/* Form Heading */
+.form-container h3 {
+    font-size: 1.8rem;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Form Inputs */
+.form-control {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 12px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    transition: border-color 0.3s ease;
+}
+
+/* Invalid input fields */
+.is-invalid {
+    border-color: red;
+}
+
+/* Error Message */
+.invalid-feedback {
+    font-size: 0.9rem;
+    color: red;
+    margin-top: 5px;
+}
+
+/* Submit Button */
+button {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1.1rem;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for button */
+button:hover {
+    background-color: #45a049;
+}
+
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+    .inner {
+        flex-direction: column;
+        width: 90%;
+    }
+
+    .image-holder {
+        display: none;
+    }
+}
