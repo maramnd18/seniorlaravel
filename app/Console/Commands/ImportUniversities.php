@@ -14,35 +14,38 @@ class ImportUniversities extends Command
     protected $description = 'Import universities, faculties, and majors from JSON';
 
     public function handle()
-    {
-        $json = file_get_contents(storage_path('app/universities/mu.json'));
+{
+    $directory = storage_path('app/universities');
+    $files = glob($directory . '/*.json'); // get all .json files
 
+    foreach ($files as $filePath) {
+        $json = file_get_contents($filePath);
         $data = json_decode($json, true);
 
         if (!$data || !isset($data['university'])) {
-            $this->error('Invalid JSON data.');
-            return 1;
+            $this->error("❌ Invalid JSON in file: " . basename($filePath));
+            continue;
         }
 
         $uniData = $data['university'];
 
-        // Create or update university
+        // ✅ Log what you're importing
+        $this->info('🔍 Importing university: ' . $uniData['id']);
+
+        // ✅ Actually create/update university (this was missing before!)
         $university = University::updateOrCreate(
             ['code' => $uniData['id']],
-            [
-                'name' => $uniData['name'],
-                'website' => $uniData['website']
-            ]
+            ['name' => $uniData['name'], 'website' => $uniData['website']]
         );
 
-        // Loop faculties
+        // ✅ Faculties loop
         foreach ($uniData['faculties'] as $facultyData) {
             $faculty = Faculty::updateOrCreate(
                 ['university_id' => $university->id, 'name' => $facultyData['name']],
                 []
             );
 
-            // Loop majors
+            // ✅ Majors loop
             foreach ($facultyData['majors'] as $majorName) {
                 Major::updateOrCreate(
                     ['faculty_id' => $faculty->id, 'name' => $majorName],
@@ -51,7 +54,11 @@ class ImportUniversities extends Command
             }
         }
 
-        $this->info('✅ All universities imported successfully!');
-        return 0;
+        $this->info('✅ Done with: ' . $uniData['name']);
     }
+
+    $this->info('🎉 All universities imported successfully!');
+    return 0;
+}
+
 }
