@@ -6,48 +6,52 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use App\Models\University;
 use App\Models\Faculty;
+use App\Models\Major;
 
 class ImportUniversities extends Command
 {
     protected $signature = 'import:universities';
-    protected $description = 'Import universities from JSON files into the database';
+    protected $description = 'Import universities, faculties, and majors from JSON';
 
     public function handle()
-{
-    $files = Storage::files('universities');
+    {
+        $json = file_get_contents(storage_path('app/universities/mu.json'));
 
-    if (empty($files)) {
-        $this->error('No JSON files found in storage/app/universities');
-        return;
-    }
-
-    foreach ($files as $file) {
-        $this->info("Processing file: $file");
-
-        $json = Storage::get($file);
         $data = json_decode($json, true);
 
-        if (!$data) {
-            $this->error("Invalid JSON in file: $file");
-            continue;
+        if (!$data || !isset($data['university'])) {
+            $this->error('Invalid JSON data.');
+            return 1;
         }
 
-        $university = University::create([
-            'name' => $data['name'],
-            'logo' => $data['logo'] ?? null,
-            'website' => $data['website'] ?? null,
-        ]);
+        $uniData = $data['university'];
 
-        foreach ($data['faculties'] as $facultyData) {
-            Faculty::create([
-                'university_id' => $university->id,
-                'name' => $facultyData['name'],
-                'majors' => json_encode($facultyData['majors']),
-            ]);
+        // Create or update university
+        $university = University::updateOrCreate(
+            ['code' => $uniData['id']],
+            [
+                'name' => $uniData['name'],
+                'website' => $uniData['website']
+            ]
+        );
+
+        // Loop faculties
+        foreach ($uniData['faculties'] as $facultyData) {
+            $faculty = Faculty::updateOrCreate(
+                ['university_id' => $university->id, 'name' => $facultyData['name']],
+                []
+            );
+
+            // Loop majors
+            foreach ($facultyData['majors'] as $majorName) {
+                Major::updateOrCreate(
+                    ['faculty_id' => $faculty->id, 'name' => $majorName],
+                    []
+                );
+            }
         }
+
+        $this->info('✅ All universities imported successfully!');
+        return 0;
     }
-
-    $this->info("Universities imported successfully!");
-}
-
 }

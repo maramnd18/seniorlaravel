@@ -40,7 +40,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 // }
 class University extends Model
 {
-    protected $fillable = ['name', 'logo', 'website'];
+    use HasFactory;
+
+    protected $fillable = ['code', 'name', 'website'];
 
     public function faculties()
     {

@@ -9,9 +9,7 @@ class Major extends Model
 {
     use HasFactory;
 
-    protected $table = 'majors';
-
-    protected $fillable = ['MajorName', 'Description', 'faculty_id'];
+    protected $fillable = ['faculty_id', 'name'];
 
     public function faculty()
     {
